@@ -5,6 +5,20 @@ let roleIndex = 0;
 let charIndex = 0;
 let isDeleting = false;
 
+const menuIcon = document.getElementById("menu-icon");
+const navbar = document.getElementById("navbar");
+
+menuIcon.onclick = () => {
+    navbar.classList.toggle("active");
+};
+
+document.querySelectorAll(".navbar a").forEach(link => {
+    link.addEventListener("click", () => {
+        navbar.classList.remove("active");
+    });
+});
+
+
 function typeText() {
     const currentRole = roles[roleIndex];
     

@@ -77,6 +77,55 @@ html {
 .navbar a.active::after {
     width: 100%;
 }
+/* ================= MOBILE NAVBAR FIX ================= */
+
+/* Menu icon (hamburger) */
+.menu-icon {
+    display: none;
+    font-size: 2.8rem;
+    color: #ededed;
+    cursor: pointer;
+    z-index: 101;
+}
+
+/* Mobile styles */
+@media (max-width: 768px) {
+
+    .header {
+        padding: 2rem 5%;
+    }
+
+    .menu-icon {
+        display: block;
+    }
+
+    .navbar {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background: rgba(8, 27, 41, 0.98);
+        backdrop-filter: blur(10px);
+        display: none;              /* KEY FIX */
+        flex-direction: column;
+        align-items: center;
+        padding: 2rem 0;
+    }
+
+    .navbar a {
+        margin: 1.5rem 0;           /* REMOVE horizontal spacing */
+        font-size: 2rem;
+    }
+
+    .navbar.active {
+        display: flex;              /* Show only when toggled */
+    }
+}
+
+
+
+
+
 
 /* Home Section */
 .home {
