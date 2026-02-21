@@ -949,3 +949,94 @@ html {
     }
 }
 
+/* ========================================= */
+/* Projects Section */
+/* ========================================= */
+.projects {
+    min-height: auto;
+    padding: 10rem 9% 5rem;
+    background: #081b29;
+}
+
+.projects-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 3rem;
+    margin-top: 3rem;
+}
+
+.project-card {
+    position: relative;
+    flex: 1 1 30rem;
+    max-width: 38rem;
+    padding: 3rem 2.5rem;
+    border: 0.2rem solid #00abf0;
+    border-radius: 0.8rem;
+    background: rgba(0, 171, 240, 0.05);
+    text-align: center;
+    transition: 0.5s ease;
+    overflow: hidden;
+    z-index: 1;
+    text-decoration: none; 
+    display: block;
+}
+
+/* Hover Background Fill Effect */
+.project-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 100%;
+    background: rgba(0, 171, 240, 0.1);
+    z-index: -1;
+    transition: 0.5s;
+}
+
+.project-card:hover::before {
+    width: 100%;
+}
+
+/* Hover Float & Glow Effect */
+.project-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 0 20px rgba(0, 171, 240, 0.4);
+    border-color: #00abf0;
+}
+
+.project-card h3 {
+    font-size: 2.2rem;
+    color: #00abf0;
+    margin-bottom: 1.5rem;
+    text-shadow: 0 0 10px rgba(0, 171, 240, 0.3);
+}
+
+.project-card h3 i {
+    margin-right: 0.8rem;
+}
+
+.project-card p {
+    font-size: 1.4rem;
+    color: #ededed;
+    line-height: 1.6;
+    margin-bottom: 2.5rem;
+}
+
+.project-tags {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.project-tags span {
+    font-size: 1.2rem;
+    padding: 0.5rem 1rem;
+    border-radius: 0.4rem;
+    border: 0.1rem solid #00abf0;
+    background: #081b29;
+    color: #00abf0;
+    font-weight: 500;
+}
