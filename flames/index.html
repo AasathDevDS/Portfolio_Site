@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FLAMES Calculator</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #1a0b10; /* Dark Valentine background */
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        /* Floating background hearts */
+        .bg-heart {
+            position: absolute;
+            color: rgba(255, 71, 87, 0.1);
+            font-size: 5rem;
+            animation: float 10s linear infinite;
+            z-index: -1;
+        }
+        @keyframes float {
+            0% { transform: translateY(100vh) scale(0.5) rotate(0deg); opacity: 0; }
+            20% { opacity: 1; }
+            100% { transform: translateY(-20vh) scale(1.2) rotate(360deg); opacity: 0; }
+        }
+
+        .container {
+            background-color: rgba(30, 15, 20, 0.85);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 16px;
+            border: 1px solid #ff4d6d;
+            box-shadow: 0 0 30px rgba(255, 77, 109, 0.3);
+            text-align: center;
+            width: 100%;
+            max-width: 400px;
+            z-index: 1;
+        }
+
+        h1 {
+            margin-top: 0;
+            color: #ff4d6d;
+            letter-spacing: 3px;
+            text-shadow: 0 0 10px rgba(255, 77, 109, 0.5);
+        }
+
+        input {
+            width: calc(100% - 24px);
+            padding: 14px;
+            margin: 10px 0;
+            border: 1px solid #4a202b;
+            border-radius: 8px;
+            background-color: #2b131b;
+            color: #ffffff;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #ff4d6d;
+            box-shadow: 0 0 15px rgba(255, 77, 109, 0.4);
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            margin-top: 25px;
+            border: none;
+            border-radius: 8px;
+            background-color: #ff4d6d;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            animation: heartbeat 2s infinite;
+        }
+
+        button:hover {
+            background-color: #ff758f;
+            transform: scale(1.05);
+            animation: none; /* Stops beating on hover */
+        }
+
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            10% { transform: scale(1.03); }
+            20% { transform: scale(1); }
+            30% { transform: scale(1.03); }
+            40% { transform: scale(1); }
+            100% { transform: scale(1); }
+        }
+
+        #resultBox {
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 12px;
+            background-color: #2b131b;
+            display: none; 
+            transform: scale(0);
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        /* Animation class to trigger the pop-in */
+        #resultBox.show {
+            display: block;
+            transform: scale(1);
+        }
+
+        #emojiText { font-size: 40px; margin: 0 0 10px 0; }
+        #resultText { font-size: 28px; font-weight: bold; margin: 0; text-transform: uppercase;}
+    </style>
+</head>
+<body>
+
+    <div class="bg-heart" style="left: 10%; animation-duration: 8s;">❤️</div>
+    <div class="bg-heart" style="left: 80%; animation-duration: 12s; animation-delay: 2s;">💖</div>
+    <div class="bg-heart" style="left: 45%; animation-duration: 10s; animation-delay: 5s;">💘</div>
+
+    <div class="container">
+        <h1>F.L.A.M.E.S</h1>
+        <p style="color: #ffb3c6;">Discover your connection.</p>
+        
+        <input type="text" id="boyName" placeholder="First Name" autocomplete="off">
+        <input type="text" id="girlName" placeholder="Second Name" autocomplete="off">
+        
+        <button onclick="calculateFlames()">Calculate Sparks</button>
+
+        <div id="resultBox">
+            <p id="emojiText"></p>
+            <p id="resultText"></p>
+        </div>
+    </div>
+
+    <script>
+        // Dictionary mapping each result to its specific theme
+        const outcomeData = {
+            'Friend': { text: 'Friend', emoji: '🤝😊', color: '#feca57' },
+            'Love': { text: 'Love', emoji: '❤️🔥', color: '#ff4d6d' },
+            'Affection': { text: 'Affection', emoji: '🥰💖', color: '#ff758f' },
+            'Marriage': { text: 'Marriage', emoji: '💍💒', color: '#1dd1a1' },
+            'Enemy': { text: 'Enemy', emoji: '⚔️😠', color: '#c8d6e5' },
+            'Sibling': { text: 'Sibling', emoji: '👫🙄', color: '#54a0ff' }
+        };
+
+        function calculateFlames() {
+            let boyName = document.getElementById('boyName').value.toLowerCase().replace(/\s/g, '');
+            let girlName = document.getElementById('girlName').value.toLowerCase().replace(/\s/g, '');
+            const resultBox = document.getElementById('resultBox');
+            const resultText = document.getElementById('resultText');
+            const emojiText = document.getElementById('emojiText');
+
+            // Reset animation state
+            resultBox.classList.remove('show');
+
+            if (!boyName || !girlName) {
+                alert("Please enter both names to calculate.");
+                return;
+            }
+
+            let totalLength = boyName.length + girlName.length;
+            let matches = 0;
+            let girlNameArr = girlName.split('');
+
+            for (let char of boyName) {
+                let indexInGirl = girlNameArr.indexOf(char);
+                if (indexInGirl !== -1) {
+                    matches++;
+                    girlNameArr.splice(indexInGirl, 1);
+                }
+            }
+
+            let flamesValue = totalLength - (matches * 2);
+
+            if (flamesValue === 0) {
+                emojiText.innerText = "👯‍♂️✨";
+                resultText.innerText = "Exact Match!";
+                resultText.style.color = "#c9184a";
+                setTimeout(() => resultBox.classList.add('show'), 50);
+                return;
+            }
+
+            let letters = ['Friend', 'Love', 'Affection', 'Marriage', 'Enemy', 'Sibling'];
+
+            while (letters.length > 1) {
+                let splitIdx = (flamesValue - 1) % letters.length;
+                let tail = letters.slice(splitIdx + 1);
+                let head = letters.slice(0, splitIdx);
+                letters = tail.concat(head);
+            }
+
+            // Grab the specific data for the winning letter
+            let finalResult = letters[0];
+            let data = outcomeData[finalResult];
+
+            // Apply the specific text, emoji, and color
+            emojiText.innerText = data.emoji;
+            resultText.innerText = data.text;
+            resultText.style.color = data.color;
+            
+            // Trigger the CSS pop-in animation
+            setTimeout(() => resultBox.classList.add('show'), 50);
+        }
+    </script>
+
+</body>
+</html>
